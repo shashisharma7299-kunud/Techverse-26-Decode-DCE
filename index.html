@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Decode DCE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <canvas id="signalCanvas" aria-hidden="true"></canvas>
+
+    <main class="shell">
+      <header class="topbar">
+        <button class="brand" data-action="home" type="button">
+          <span class="brand-mark">D</span>
+          <span>DECODE DCE</span>
+        </button>
+        <div class="top-actions">
+          <span class="game-state" id="gameStateLabel">Checking signal</span>
+          <button class="ghost-btn" data-action="admin" type="button">Admin</button>
+        </div>
+      </header>
+
+      <section class="view hero-view is-active" id="homeView" aria-labelledby="homeTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">Tech Fest Hunt</p>
+          <h1 id="homeTitle">HELLO HUNTERS.</h1>
+          <p class="intro">Decode clues, protect your attempts, and climb the DCE leaderboard before the timer runs out.</p>
+          <button class="primary-btn large" data-action="start" type="button">START Decoding</button>
+        </div>
+        <div class="signal-panel" aria-hidden="true">
+          <div class="radar">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="code-strip">0100 DCE 1101 HUNT 2026</div>
+        </div>
+      </section>
+
+      <section class="view form-view" id="loginView" aria-labelledby="loginTitle">
+        <div class="panel narrow">
+          <p class="eyebrow">Decoder Entry</p>
+          <h2 id="loginTitle">Login Decoders</h2>
+          <form id="playerForm" class="stacked-form">
+            <label>
+              <span>Name of team leader</span>
+              <input id="leaderName" name="leaderName" type="text" placeholder="Shashi" autocomplete="name" required>
+            </label>
+            <label>
+              <span>Team name</span>
+              <input id="teamName" name="teamName" type="text" placeholder="Decoder" required>
+            </label>
+            <label>
+              <span>Registration no. of leader</span>
+              <input id="registrationNo" name="registrationNo" type="text" placeholder="DCE2026-001" required>
+            </label>
+            <button class="primary-btn" type="submit">Login Decoders</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="view rules-view" id="rulesView" aria-labelledby="rulesTitle">
+        <div class="panel wide">
+          <p class="eyebrow">Read Before You Decode</p>
+          <h2 id="rulesTitle">Disclaimer.</h2>
+          <div class="rules-grid">
+            <div>
+              <strong>Total Marks</strong>
+              <span>200 per day</span>
+            </div>
+            <div>
+              <strong>Total Questions</strong>
+              <span>20 per day</span>
+            </div>
+            <div>
+              <strong>Total Attempts</strong>
+              <span>Only 3 per question</span>
+            </div>
+          </div>
+          <h3>Negative Marking</h3>
+          <div class="penalty-list">
+            <div><span>Q1-Q10</span><strong>-1 marks</strong></div>
+            <div><span>Q11-Q15</span><strong>-2 marks</strong></div>
+            <div><span>Q16-Q20</span><strong>-3 marks</strong></div>
+          </div>
+          <button class="primary-btn" data-action="beginGame" type="button">Let's Decode</button>
+        </div>
+      </section>
+
+      <section class="view game-view" id="gameView" aria-labelledby="questionTitle">
+        <div class="game-layout">
+          <aside class="status-rail">
+            <div class="stat">
+              <span>Score</span>
+              <strong id="scoreLabel">0</strong>
+            </div>
+            <div class="stat">
+              <span>Timer</span>
+              <strong id="timerLabel">--:--</strong>
+            </div>
+            <div class="stat">
+              <span>Question</span>
+              <strong id="questionCountLabel">1/20</strong>
+            </div>
+            <div class="question-jump" id="questionJump"></div>
+          </aside>
+
+          <div class="panel question-panel">
+            <div class="question-head">
+              <p class="eyebrow" id="attemptLabel">3 attempts left</p>
+              <h2 id="questionTitle">Q1.</h2>
+            </div>
+            <p class="question-text" id="questionText"></p>
+            <form id="answerForm" class="answer-form">
+              <label>
+                <span>Answer</span>
+                <input id="answerInput" type="text" placeholder="Type your answer" autocomplete="off" required>
+              </label>
+              <div class="answer-actions">
+                <button class="primary-btn" type="submit">Submit Answer</button>
+                <button class="ghost-btn" data-action="skipQuestion" type="button">Next</button>
+              </div>
+            </form>
+            <p class="message" id="answerMessage" role="status"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="view score-view" id="scoreView" aria-labelledby="scoreTitle">
+        <div class="panel wide">
+          <p class="eyebrow">Scorecard</p>
+          <h2 id="scoreTitle">Decoder Scorecard</h2>
+          <div class="score-summary" id="scoreSummary"></div>
+          <form id="feedbackForm" class="stacked-form">
+            <label>
+              <span>Feedback</span>
+              <textarea id="feedbackText" rows="5" placeholder="Tell us how the hunt felt."></textarea>
+            </label>
+            <button class="primary-btn" type="submit">Submit</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="view thanks-view" id="thanksView" aria-labelledby="thanksTitle">
+        <div class="hero-copy centered">
+          <p class="eyebrow">Transmission Complete</p>
+          <h1 id="thanksTitle">THANK YOU FOR PARTICIPATING</h1>
+          <p class="intro">LOVE from DCE</p>
+          <button class="ghost-btn" data-action="home" type="button">Back to Start</button>
+        </div>
+      </section>
+
+      <section class="view admin-view" id="adminView" aria-labelledby="adminTitle">
+        <div class="admin-grid">
+          <div class="panel">
+            <p class="eyebrow">Control Room</p>
+            <h2 id="adminTitle">Admin Login</h2>
+            <form id="adminLoginForm" class="stacked-form">
+              <label id="adminCreateLabel">
+                <span>Create admin password</span>
+                <input id="newAdminPassword" type="password" minlength="4" placeholder="Minimum 4 characters">
+              </label>
+              <label>
+                <span>Admin password</span>
+                <input id="adminPassword" type="password" placeholder="Enter password">
+              </label>
+              <button class="primary-btn" type="submit">Open Admin</button>
+            </form>
+          </div>
+
+          <div class="admin-panel is-hidden" id="adminDashboard">
+            <div class="panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Game Controls</p>
+                  <h2>Decode DCE Admin</h2>
+                </div>
+                <button class="ghost-btn" data-action="adminLogout" type="button">Logout</button>
+              </div>
+              <form id="settingsForm" class="settings-row">
+                <label>
+                  <span>Game time in minutes</span>
+                  <input id="gameMinutes" type="number" min="1" max="600" step="1">
+                </label>
+                <button class="primary-btn" type="submit">Set Time</button>
+                <button class="danger-btn" data-action="toggleGame" type="button" id="toggleGameBtn">End Event</button>
+              </form>
+              <div class="admin-stats">
+                <div><span>Participants</span><strong id="participantCount">0</strong></div>
+                <div><span>Questions</span><strong id="adminQuestionCount">20</strong></div>
+                <div><span>Status</span><strong id="adminStatus">Active</strong></div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Participant Control</p>
+                  <h2>Student Game Control</h2>
+                </div>
+                <button class="ghost-btn" data-action="clearPlayers" type="button">Clear Players</button>
+              </div>
+              <div class="table-wrap">
+                <table class="participants-table">
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>Reg. No.</th>
+                      <th>Progress</th>
+                      <th>Score</th>
+                      <th>Time</th>
+                      <th>Status</th>
+                      <th>Control</th>
+                    </tr>
+                  </thead>
+                  <tbody id="participantsBody"></tbody>
+                </table>
+              </div>
+              <div class="scorecard-detail" id="adminScorecard"></div>
+            </div>
+
+            <div class="panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Leaderboard</p>
+                  <h2>Decoder Positions</h2>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Team</th>
+                      <th>Leader</th>
+                      <th>Progress</th>
+                      <th>Score</th>
+                      <th>Time Left</th>
+                      <th>Feedback</th>
+                    </tr>
+                  </thead>
+                  <tbody id="leaderboardBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel question-admin">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Question Bank</p>
+                  <h2>Add or Edit Questions</h2>
+                </div>
+                <button class="ghost-btn" data-action="addQuestion" type="button">Add Question</button>
+              </div>
+              <div id="questionEditor"></div>
+              <button class="primary-btn" data-action="saveQuestions" type="button">Save Questions</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="decode app 5.js"></script>
+  </body>
+</html>
